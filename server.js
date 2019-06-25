@@ -28,7 +28,7 @@ app.use(cookieSession({
 }))
 
 
-app.post("/api/login", (req, res, next) => {
+app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
       if (err) {
         return next(err);
@@ -44,7 +44,7 @@ app.post("/api/login", (req, res, next) => {
     })(req, res, next);
   });
   
-    app.get("/api/logout", function(req, res) {
+    app.get("/logout", function(req, res) {
       req.logout(); 
   
     console.log("logged out")
@@ -73,22 +73,6 @@ app.post("/api/login", (req, res, next) => {
       }
     )
   )
-  const authMiddleware = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-      res.status(401).send('You are not authenticated')
-    } else {
-      return next()
-    }
-  }
-  app.get("/api/user", authMiddleware, (req, res) => {
-    let user = users.find(user => {
-      return user.id === req.session.passport.user
-    })
-  
-    console.log([user, req.session])
-  
-    res.send({ user: user })
-  })
   
   passport.serializeUser((user, done) => {
     done(null, user.id)
